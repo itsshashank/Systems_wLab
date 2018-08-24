@@ -23,5 +23,5 @@ void main()
     }
     avgt_t /= n;
     avgw_t /= n;
-    printf("Avg Waiting time = %2.f\nAvg Turnaround time =%2.f\n", avgw_t, avgt_t);
+    printf("Avg Waiting time = %.2f\nAvg Turnaround time =%.2f\n", avgw_t, avgt_t);
 }
