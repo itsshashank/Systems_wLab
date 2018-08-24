@@ -8,7 +8,7 @@ int quanta; // sort of constant
 void main(){
     printf("Enter the quanta of the RoundRobin :");
     scanf("%d",&quanta);
-    int n, i,j,key,order[max], finish, process = 0, total_bt = 0, run = 0;
+    int n, i,j, finish, process = 0, total_bt = 0, run = 0;
     float avgt_t=0.0,avgw_t=0.0;
     printf("Enter no of processes:");
     scanf("%d", &n);
