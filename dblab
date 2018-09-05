@@ -71,6 +71,22 @@ select min(count(*)) as dept_count,my_emp.dept_id from my_emp,my_dept where my_e
 select dept_id,count(*) from my_emp 
     group by(dept_id)
     having count(*) = (select min(count(*)) from my_emp group by (dept_id));
+
+
 select my_dept.dname from my_dept,(select dept_id,count(*) from my_emp 
     group by(dept_id)
     having count(*) = (select min(count(*)) from my_emp group by (dept_id))) a where my_dept.dept_id = a.dept_id;
+SELECT *
+FROM (
+  SELECT basic_pay, 
+         rank() over (order by basic_pay desc) as row_rank
+  FROM my_emp
+) t
+WHERE row_rank = 1;
+select * from  my_emp order by basic_pay desc limit 1,1;
+select max(basic_pay) from my_emp where basic_pay not in (select max(basic_pay) from my_emp);
+select min(basic_pay) from my_emp where basic_pay not in (select min(basic_pay) from my_emp);
+select name from my_emp, (select avg(basic_pay) as bp,dept_id from my_emp group by (dept_id)) a
+where my_emp.dept_id =a.dept_id and my_emp.basic_pay >a.bp;
+select avg(basic_pay) from my_emp group by (dept_id);
+
