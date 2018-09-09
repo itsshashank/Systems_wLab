@@ -67,7 +67,7 @@ void main(){
         p[order[i]].wait_t = run;
         run += p[order[i]].burst_t;
         p[order[i]].comp_t = run;
-        avgw_t += p[order[i]].wait_t;
+        avgw_t += p[order[i]].wait_t-p[order[i]].arr_t;
         avgt_t += p[order[i]].comp_t - p[order[i]].arr_t; //TAT= Completion time-arrival time
     }
     avgt_t /= n;
