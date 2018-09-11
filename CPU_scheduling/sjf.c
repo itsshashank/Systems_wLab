@@ -16,7 +16,7 @@ void print_order(int arr[], int n)
 void main()
 {
     int n, i, j, key, process = 0, order[max], total_bt = 0, run = 0;
-    float avgt_t=0.0,avgw_t=0.0;
+    float avgt_t = 0.0, avgw_t = 0.0;
     printf("Enter no of processes:");
     scanf("%d", &n);
     printf("Enter the Burst time and arrival time\n");
@@ -68,8 +68,8 @@ void main()
         p[order[i]].wait_t = run;
         run += p[order[i]].burst_t;
         p[order[i]].comp_t = run;
-        avgw_t += p[order[i]].wait_t-p[order[i]].arrv_t;
-        avgt_t += p[order[i]].comp_t-p[order[i]].arrv_t;
+        avgw_t += p[order[i]].wait_t - p[order[i]].arrv_t;
+        avgt_t += p[order[i]].comp_t - p[order[i]].arrv_t;
     }
     avgt_t /= n;
     avgw_t /= n;
