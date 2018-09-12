@@ -10,15 +10,18 @@ void cal_need_matrix(int n,int m){ //need = max - allocation
 }
 int main()
 {
-    int m,n,i,j;
+    int p,r,i,j;
     printf("Enter the no of process and no of resources:");
-    scanf("%d%d",&n,&m);
+    scanf("%d%d",&p,&r);
     printf("Enter the available instances of resources");
-    for(i=0;i<m;i++)
+    for(i=0;i<r;i++)
         scanf("%d",&available[i]);
     printf("Enter the Allocation and max for a process:\n");
-    printf("process\t");
-    char r ='A';
+    printf("process\tAllolcation\tmax\n\t\t");
+    char ch ='A';
+    for(i=0;i<m;i++,r++)
+        printf("%c\t",r);
+        ch ='A';
     for(i=0;i<m;i++,r++)
         printf("%c\t",r);
     printf("\n");    
@@ -29,6 +32,9 @@ int main()
         }
     }
     cal_need_matrix(n,m); // to calculate need matrix
-        
+    int safe_seq[p];
+    printf("\nSystem is in safe state the sequnece is :")
+	for (int i = 0; i < P ; i++)
+		printf("%d\t",safe_seq[i]);
     return 0;
 }
