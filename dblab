@@ -89,4 +89,21 @@ select min(basic_pay) from my_emp where basic_pay not in (select min(basic_pay) 
 select name from my_emp, (select avg(basic_pay) as bp,dept_id from my_emp group by (dept_id)) a
 where my_emp.dept_id =a.dept_id and my_emp.basic_pay >a.bp;
 select avg(basic_pay) from my_emp group by (dept_id);
-
+select id from my_emp where name like 'ram';
+select name as emp_under_ram from my_emp where manager_id in (select id from my_emp where name like 'ram');
+select dept_id,count(*) as no_of_dept_employees from my_emp group by(dept_id)
+having count(*) > 3;
+select dept_id, min(basic_pay) as lowest_salary from my_emp group by(dept_id) having min(basic_pay) > 2500;
+select max(basic_pay) from my_emp group by(dept_id);
+select name from my_emp where basic_pay in (select max(basic_pay) from my_emp group by(dept_id));
+select e.name from my_emp e,(select dept_id,max(basic_pay) as bp from my_emp group by(dept_id)) a where e.dept_id = a.dept_id and e.basic_pay = a.bp;
+select name from my_emp where basic_pay not in (select min(basic_pay) from my_emp);
+select name from my_emp where basic_pay not in (select min(basic_pay) from my_emp) or basic_pay not in (select max(basic_pay) from my_emp);
+alter table my_emp add city varchar(10);
+update my_dept set city='ekm' where dept_id = 1;
+update my_dept set city='ktm' where dept_id = 2;
+update my_dept set city='tvm' where dept_id = 3;
+update my_dept set city='pkd' where dept_id = 4;
+update my_emp set city='ekm' where id = 101;
+update my_emp set city='ktm' where id = 121;
+select e.name from my_emp e,my_dept d where e.dept_id = d.dept_id and e.city = d.city;
