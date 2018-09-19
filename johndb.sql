@@ -124,3 +124,10 @@ select dept_id,count(dept_id) as no_of_emp_havemorethan_5000 from my_emp  where 
         select dept_id from my_emp group by(dept_id) having count(*) > 4) 
     and basic_pay > 5000 group by(dept_id);
 
+INSERT into my_emp VALUES (201,NULL,'adarsh','cleaner',500,'m',121,'01-APR-2002','ktm');
+INSERT into my_emp VALUES (202,NULL,'arjun','driver',750,'m',102,'20-JAN-2005','ktm');
+INSERT into my_emp VALUES (203,NULL,'balu','peon',250,'m',102,'01-SEP-2004','ktm');
+
+SELECT name,ISNULL(dname,'NULL') from my_emp,my_dept;
+SELECT name,COALESCE(dept_id,0) as dept_name from my_emp;
+SELECT name,case when dept_id IS NULL then 'NULL' end as dept_name from my_emp where dept_id is NULL;
