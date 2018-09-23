@@ -136,14 +136,14 @@ int main()
     do{
         printf("enter theprocesses to request:");
         scanf("%d",&tar);
-        printf("process request\t\t");
+        printf("request \t");
         ch = 'A';
         for (i = 0; i < r; i++, ch++)
                 {
                     printf("%c ", ch);
                 }
             printf("\n");
-            printf("p%d",tar);
+            printf("p%d\t",tar);
             for (j = 0; j < r; j++)
             {
                 scanf("%d", &request[j]);
