@@ -114,6 +114,11 @@ int main()
             }
         }
         //i++;
+        if(nextp == -1)
+        {
+            printf("System not in safe state\n");
+            return 1;
+        }
     }
     printf("\nSystem is in safe state\n the sequnece is :");
     for (i = 0; i < p; i++)
