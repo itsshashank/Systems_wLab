@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define limit 50
-int available[limit], max[limit][limit], allocation[limit][limit], safe_seq[limit], process[limit], finish[limit],need[limit][limit], work[limit];
+int available[limit], max[limit][limit], allocation[limit][limit], safe_seq[limit], process[limit], finish[limit], need[limit][limit], work[limit];
 void calneedmatrix(int n, int m)
 { //need = max - allocation
     int i, j;
@@ -29,10 +29,10 @@ void printwork(int r)
         work[j] = available[j] - work[j];
     }
 }
-int resourceAllocation(int p,int r)
+int resourceAllocation(int p, int r)
 {
     int nextp;
-    int i = 0,j,k,l;
+    int i = 0, j, k, l;
     while (i < p)
     {
         for (j = 0; j < p; j++)
@@ -60,19 +60,22 @@ int resourceAllocation(int p,int r)
                 }
             }
         }
-        if(nextp == -1)
+        if (nextp == -1)
             return 1;
     }
     return 0;
 }
-void display(int res,int p){
-    if(res == 0){
+void display(int res, int p)
+{
+    if (res == 0)
+    {
         printf("\nSystem is in safe state\nthe sequnece is :");
         for (int i = 0; i < p; i++)
             printf("%d\t", safe_seq[i]);
         printf("\n");
     }
-    else{
+    else
+    {
         printf("System not in safe state\n");
     }
 }
@@ -131,64 +134,77 @@ int main()
         }
     }
     calneedmatrix(p, r); // to calculate need matrix
-    display(resourceAllocation(p,r),p);
-    int n=0,tar,request[limit];
-    do{
+    display(resourceAllocation(p, r), p);
+    int n = 0, tar, request[limit];
+    do
+    {
         printf("enter theprocesses to request:");
-        scanf("%d",&tar);
+        scanf("%d", &tar);
         printf("request \t");
         ch = 'A';
         for (i = 0; i < r; i++, ch++)
+        {
+            printf("%c ", ch);
+        }
+        printf("\n");
+        printf("p%d\t", tar);
+        for (j = 0; j < r; j++)
+        {
+            scanf("%d", &request[j]);
+            // max[tar][j] += update[j];
+        }
+        for (i = 0; i < p; i++)
+        {
+            finish[i] = 0;
+            safe_seq[i] = -1;
+        }
+        for (j = 0; j < r; j++)
+            work[j] = 0;
+        for (i = 0; i < p; i++)
+        {
+            process[i] = i;
+            for (j = 0; j < r; j++)
+            {
+                if (available[j] > 0)
+                    work[j] += allocation[i][j];
+                else
                 {
-                    printf("%c ", ch);
-                }
-            printf("\n");
-            printf("p%d\t",tar);
-            for (j = 0; j < r; j++)
-            {
-                scanf("%d", &request[j]);
-                // max[tar][j] += update[j]; 
-            }
-            for (i = 0; i < p; i++)
-            {
-                finish[i] = 0;
-                safe_seq[i] = -1;
-            }
-            for (j = 0; j < r; j++)
-                    work[j] = 0;
-            for (i = 0; i < p; i++)
-            {
-                process[i] = i;
-                for (j = 0; j < r; j++)
-                {
-                    if (available[j] > 0)
-                        work[j] += allocation[i][j];
-                    else
-                    {
-                        printf("cant allocate ");
-                        return 1;
-                    }
+                    printf("cant allocate ");
+                    return 1;
                 }
             }
-            int flag =0; // resource request algorithem
+        }
+        int flag = 0; // resource request algorithem
+        for (j = 0; j < r; j++)
+        {
+            if (request[j] <= need[tar][j])
+                ;
+            else
+                flag = 1;
+        }
+        for (j = 0; j < r; j++)
+        {
+            if (request[j] <= available[j])
+                ;
+            else
+                flag = 1;
+        }
+        if (flag == 0)
+        {
             for (j = 0; j < r; j++)
-                { if(request[j] <= need[tar][j]) ;else flag =1;
-                }
-            for (j = 0; j < r; j++)
-                { if(request[j] <= available[j]) ;else flag =1;
-                }
-            if(flag == 0){
-                for (j = 0; j < r; j++)
-                { available[j]-=request[j];
-                    allocation[tar][j] +=request[j];
-                    need[tar][j] -=request[j];
-                }
-            }else display(1,p);        
-        printwork(r);    
+            {
+                available[j] -= request[j];
+                allocation[tar][j] += request[j];
+                need[tar][j] -= request[j];
+            }
+        }
+        else
+            display(1, p);
+        printwork(r);
         //calneedmatrix(p, r);
-        display(resourceAllocation(p,r),p);
+        display(resourceAllocation(p, r), p);
         printf("do you want to request more (1/0):");
-        scanf("%d",&n);
-    }while(n==1);
+        scanf("%d", &n);
+    } while (n == 1);
     return 0;
 }
