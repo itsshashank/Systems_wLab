@@ -24,35 +24,69 @@ int main()
         }
         queue[j + 1] = key;
     }
-    //assuming arm moves upwards
+    printf("enter direction to move (1 right /0 left) :");
+    int dir, test = 0;
+    scanf("%d", &dir);
     printf("enter the upper and lower bound of the disk :");
     int up, low;
     scanf("%d %d", &up, &low);
-    int test = 0;
-    for (i = 0; i < len; i++)
+    if (dir == 1)
     {
-        if (queue[i] >= head)
+        //assuming arm moves upwards
+        for (i = 0; i < len; i++)
         {
-            test = i;
-            break;
+            if (queue[i] >= head)
+            {
+                test = i;
+                break;
+            }
+        }
+        while (i < len)
+        {
+            travel += queue[i] - head;
+            head = queue[i++];
+        }
+        //goes to the upper bound
+        travel += up - head;
+        head = up;
+        //cycle to the begining
+        //travel is not done since the cycle
+        head = low;
+        i = 0;
+        while (i < test)
+        {
+            travel += queue[i] - head;
+            head = queue[i++];
         }
     }
-    while (i < len)
+    else
     {
-        travel += queue[i] - head;
-        head = queue[i++];
-    }
-    //goes to the upper bound
-    travel += up - head;
-    head = up;
-    //cycle to the begining
-    //travel is not done since the cycle
-    head = low;
-    i = 0;
-    while (i < test)
-    {
-        travel += queue[i] - head;
-        head = queue[i++];
+        for (i = 0; i < len; i++)
+        {
+            if (queue[i] >= head)
+            {
+                test = i;
+                break;
+            }
+        }
+        while (i > 0)
+        {
+            travel += head - queue[i];
+            head = queue[i--];
+        }
+        //goes to the lower bound
+        travel += head - low;
+        head = low;
+        //cycle to the END
+        //travel is not done since the cycle
+        head = up;
+        //test = len;
+        int temp = len- 1;
+        while (temp > test)
+        {
+            travel += head - queue[temp];
+            head = queue[temp--];
+        }
     }
     printf("total head movement %d\n", travel);
     float avg = (float)travel / len;
