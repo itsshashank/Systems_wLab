@@ -61,32 +61,39 @@ int main()
     }
     else
     {
-        for (i = 0; i < len; i++)
-        {
-            if (queue[i] >= head)
-            {
-                test = i;
-                break;
-            }
-        }
-        while (i > 0)
-        {
-            travel += head - queue[i];
-            head = queue[i--];
-        }
-        //goes to the lower bound
-        travel += head - low;
-        head = low;
-        //cycle to the END
-        //travel is not done since the cycle
-        head = up;
-        //test = len;
-        int temp = len- 1;
-        while (temp > test)
-        {
-            travel += head - queue[temp];
-            head = queue[temp--];
-        }
+         for (i = 0; i < len; i++)
+         {
+             if (queue[i] >= head)
+             {
+                 test = i;
+                 break;
+             }
+         }
+        // while (i > 0)
+        // {
+        //     travel += head - queue[i];
+        //     head = queue[i--];
+        // }
+        // //goes to the lower bound
+        // travel += head - low;
+        // head = low;
+        // //cycle to the END
+        // //travel is not done since the cycle
+        // head = up;
+        // //test = len;
+        // int temp = len- 1;
+        // while (temp > test)
+        // {
+        //     travel += head - queue[temp];
+        //     head = queue[temp--];
+        // }
+        //move to 0 and then from end to min
+         test = queue[i];
+        // for (i = 1; i < len; i++)
+        //     if (test < queue[i])
+        //         test = queue[i];
+        travel += head; //head -> 0
+        travel += up - test; 
     }
     printf("total head movement %d\n", travel);
     float avg = (float)travel / len;
