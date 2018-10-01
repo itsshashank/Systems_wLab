@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define limit 50
-int available[limit], max[limit][limit], safe_seq[limit],allocation[limit][limit], need[limit][limit], finish[limit],work[limit];
+int available[limit], max[limit][limit], allocation[limit][limit], safe_seq[limit], process[limit], finish[limit], need[limit][limit], work[limit];
 void calneedmatrix(int n, int m)
 { //need = max - allocation
     int i, j;
@@ -11,7 +11,8 @@ void calneedmatrix(int n, int m)
             need[i][j] = max[i][j] - allocation[i][j];
         }
     }
-    printf("\nthe need metrix\n");
+    //optional
+    /*printf("\nthe need metrix\n");
     for (i = 0; i < n; i++)
     {
         for (j = 0; j < m; j++)
@@ -19,31 +20,23 @@ void calneedmatrix(int n, int m)
             printf("%d\t", need[i][j]);
         }
         printf("\n");
-    }
+    }*/
 }
 void printwork(int r)
 {
     for (int j = 0; j < r; j++)
     {
-        printf("%d", work[j]);
-    }
-}
-void pwork(int r)
-{
-    for (int j = 0; j < r; j++)
-    {
         work[j] = available[j] - work[j];
-        printf("%d", work[j]);
     }
 }
-void safealgo(int p,int r){
+int resourceAllocation(int p, int r)
+{
     int nextp;
-    int j,i = 0;
+    int i = 0, j, k, l;
     while (i < p)
     {
         for (j = 0; j < p; j++)
         {
-            //printf("the process %d\n", j);
             if (finish[j] == 0)
             {
                 int k;
@@ -51,7 +44,7 @@ void safealgo(int p,int r){
                     if (need[j][k] > work[k])
                     {
                         nextp = -1;
-                        //printf("the process not alloacted%d\n", j);
+                        //the process not alloacted
                         break;
                     }
                     else
@@ -61,23 +54,34 @@ void safealgo(int p,int r){
                     int l;
                     for (l = 0; l < r; l++)
                         work[l] += allocation[j][l];
-                    //printf("aloocated %d", j);
+                    //processes allocated
                     safe_seq[i++] = j;
                     finish[j] = 1;
                 }
             }
         }
-        //i++;
+        if (nextp == -1)
+            return 1;
     }
-    printwork(r);
-    printf("\nSystem is in safe state\n the sequnece is :");
-    for (i = 0; i < p; i++)
-        printf("%d\t", safe_seq[i]);
-    printf("\n");
+    return 0;
+}
+void display(int res, int p)
+{
+    if (res == 0)
+    {
+        printf("\nSystem is in safe state\nthe sequnece is :");
+        for (int i = 0; i < p; i++)
+            printf("%d\t", safe_seq[i]);
+        printf("\n");
+    }
+    else
+    {
+        printf("System not in safe state\n");
+    }
 }
 int main()
 {
-    int p, r, i, j, process[limit];
+    int p, r, i, j;
     char ch = 'A';
     printf("Enter the no of process and no of resources:");
     scanf("%d%d", &p, &r);
@@ -104,7 +108,7 @@ int main()
         for (j = 0; j < r; j++)
         {
             scanf("%d", &allocation[i][j]);
-            if (allocation[i][j] <= available[j])
+            if (available[j] > 0)
                 work[j] += allocation[i][j];
             else
             {
@@ -113,7 +117,7 @@ int main()
             }
         }
     }
-    pwork(r);
+    printwork(r);
     printf("process\tmax\n\t");
     ch = 'A';
     for (i = 0; i < r; i++, ch++)
@@ -130,38 +134,77 @@ int main()
         }
     }
     calneedmatrix(p, r); // to calculate need matrix
-    safealgo(p,r);
-    
-    int request = 0;
+    display(resourceAllocation(p, r), p);
+    int n = 0, tar, request[limit];
     do
-    {   int target;
-        printf("enter the process to request :");
-        scanf("%d",&target);
-        printf("process\tAllolcation\n\t");
+    {
+        printf("enter theprocesses to request:");
+        scanf("%d", &tar);
+        printf("request \t");
         ch = 'A';
         for (i = 0; i < r; i++, ch++)
         {
             printf("%c ", ch);
         }
         printf("\n");
-            printf("p%d\t", target);
+        printf("p%d\t", tar);
+        for (j = 0; j < r; j++)
+        {
+            scanf("%d", &request[j]);
+            // max[tar][j] += update[j];
+        }
+        for (i = 0; i < p; i++)
+        {
+            finish[i] = 0;
+            safe_seq[i] = -1;
+        }
+        for (j = 0; j < r; j++)
+            work[j] = 0;
+        for (i = 0; i < p; i++)
+        {
+            process[i] = i;
             for (j = 0; j < r; j++)
-            {   int a;
-                scanf("%d", &a);
-                max[target][j] +=a; 
-                if (available[j] >= max[target][j])
-                    work[j] += allocation[target][j];
+            {
+                if (available[j] > 0)
+                    work[j] += allocation[i][j];
                 else
                 {
                     printf("cant allocate ");
                     return 1;
                 }
             }
-        pwork(r);
-        calneedmatrix(++p, r);
-        safealgo(p,r);
-        printf("do u want to add more processes(0/1):");
-        scanf("%d", &request);
-    } while (request != 1);
+        }
+        int flag = 0; // resource request algorithem
+        for (j = 0; j < r; j++)
+        {
+            if (request[j] <= need[tar][j])
+                ;
+            else
+                flag = 1;
+        }
+        for (j = 0; j < r; j++)
+        {
+            if (request[j] <= available[j])
+                ;
+            else
+                flag = 1;
+        }
+        if (flag == 0)
+        {
+            for (j = 0; j < r; j++)
+            {
+                available[j] -= request[j];
+                allocation[tar][j] += request[j];
+                need[tar][j] -= request[j];
+            }
+        }
+        else
+            display(1, p);
+        printwork(r);
+        //calneedmatrix(p, r);
+        display(resourceAllocation(p, r), p);
+        printf("do you want to request more (1/0):");
+        scanf("%d", &n);
+    } while (n == 1);
     return 0;
 }
