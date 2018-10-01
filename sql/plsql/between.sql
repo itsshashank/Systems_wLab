@@ -2,11 +2,12 @@ DECLARE
     f NUMber := &f;
     s number := &s;
 BEGIN
-dbms_output.put_line('Prgram started.' );
+dbms_output.put('-');
 FOR a IN f .. s
 LOOP
-dbms_output.put_line(a);
+dbms_output.put('-' || a || '-');
 END LOOP;
-dbms_output.put_line('Program completed.'); 
+dbms_output.put('-');
+dbms_output.new_line;
 END;
 /
