@@ -1,2 +1,2 @@
 # Systems_wLab
-just a ripo for lab
+just a repo for lab
