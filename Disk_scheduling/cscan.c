@@ -50,6 +50,7 @@ int main()
         travel += up - head;
         head = up;
         //cycle to the begining
+        travel += up -low; 
         //travel is not done since the cycle
         head = low;
         i = 0;
@@ -69,6 +70,7 @@ int main()
                  break;
              }
          }
+        travel += up-low;
         // while (i > 0)
         // {
         //     travel += head - queue[i];
