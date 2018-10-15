@@ -25,7 +25,6 @@ void check(int phnum)
         sleep(2);
         printf("Philosopher %d takes fork %d and %d\n",
                phnum + 1, LEFT + 1, phnum + 1);
-
         printf("Philosopher %d is Eating\n", phnum + 1);
         sem_post(&S[phnum]);
     }
@@ -79,8 +78,7 @@ int main()
     for (i = 0; i < N; i++)
     {
         // create philosopher processes
-        pthread_create(&thread_id[i], NULL,
-                       philospher, &phil[i]);
+        pthread_create(&thread_id[i], NULL,philospher, &phil[i]);
         printf("Philosopher %d is thinking\n", i + 1);
     }
     for (i = 0; i < N; i++)
