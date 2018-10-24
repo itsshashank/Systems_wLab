@@ -29,12 +29,10 @@ void display()
         printf("--");
     for (int i = 0; i < root.no_of_dir; i++)
     {
-
         displaysub(i);
     }
     for (int i = 0; i < root.no_of_files; i++)
     {
-
         printf("\n  |\n  | ->\t%s", root.fname[i]);
     }
     printf("\n  |\n  =\n");
@@ -45,12 +43,15 @@ int exist(char fn[], int fd)
     if (fd == 0)
         temp = root;
     else
-        temp = d[root.no_of_dir];
-    for (int i = 0; i < temp.no_of_files; i++)
-    {
-        if (strcmp(fn, temp.fname[i]) == 0)
-            return i;
-    }
+        for (int j = 0; j < root.no_of_dir; j++)
+        {
+            temp = d[j];
+            for (int i = 0; i < temp.no_of_files; i++)
+            {
+                if (strcmp(fn, temp.fname[i]) == 0)
+                    return i;
+            }
+        }
     return -1;
 }
 int existDir(char fn[])
@@ -67,22 +68,19 @@ void add()
     struct directory temp;
     int loc, fd;
     char name[max];
-    printf("\n to which dir do you wanna add file");
-    scanf("%s", name);
-    if (strcmp(name, root.dirname) == 0)
-    {
+    printf("\n to which dir do you wanna add file root or subdir ( 0/1 ):");
+    scanf("%d", &fd);
+    if (fd == 0)
         temp = root;
-        fd = 0;
-    }
     else
     {
+        printf("\nenter the dir name:");
+
+        scanf("%s", name);
         loc = existDir(name);
         if (loc >= 0)
         {
             temp = d[loc];
-            fd = 1;
-            strcpy(temp.fname[temp.no_of_files], name);
-            temp.no_of_files++;
         }
         else
         {
@@ -90,6 +88,7 @@ void add()
             return;
         }
     }
+
     printf("\nEnter the file name : ");
     scanf("%s", name);
     if (exist(name, fd) >= 0)
