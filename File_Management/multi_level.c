@@ -11,10 +11,10 @@ struct directory
 void displaysub(int n)
 {
     struct directory temp = d[n];
-    printf("\t\n %s\n", temp.dirname);
+    printf("\n|\t %s\n \t ", temp.dirname);
     int c = 0;
     while (temp.dirname[c++] != '\0')
-        printf("--");
+        printf(" --");
     for (int i = 0; i < temp.no_of_files; i++)
     {
         printf("\n\t|\n\t| ->\t%s", temp.fname[i]);
@@ -88,7 +88,6 @@ void add()
             return;
         }
     }
-
     printf("\nEnter the file name : ");
     scanf("%s", name);
     if (exist(name, fd) >= 0)
@@ -154,7 +153,7 @@ int main(int argc, char const *argv[])
             display();
             break;
         case 4:
-            add(1);
+            addDir();
             break;
         case 5:
             //delete (1);
