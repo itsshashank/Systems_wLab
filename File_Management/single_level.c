@@ -41,7 +41,19 @@ void add()
         d.no_of_files++;
     }
 }
-
+void search()
+{
+    char name[max];
+    printf("\nEnter the file name : ");
+    scanf("%s", name);
+    if (exist(name) >= 0)
+    {
+        printf("\nfile found\n");
+        display();
+    }
+    else
+        printf("\nfile not found\n");
+}
 void delete ()
 {
     char name[max];
@@ -65,7 +77,7 @@ int main(int argc, char const *argv[])
     int ch = 1;
     do
     {
-        printf("\nDirectory Menu\n\t1.Add file\n\t2.Delete file\n\t3.Display\nEnter your option:");
+        printf("\nDirectory Menu\n\t1.Add file\n\t2.Delete file\n\t3.Display\n\t4.search\nEnter your option:");
         scanf("%d", &ch);
         switch (ch)
         {
@@ -79,6 +91,7 @@ int main(int argc, char const *argv[])
             display();
             break;
         case 4:
+            search();
             break;
         default:
             printf("not a choice try again\n");
