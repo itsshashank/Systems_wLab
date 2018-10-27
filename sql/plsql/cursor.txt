@@ -1,0 +1,16 @@
+DECLARE 
+   e_id plemp.id%type; 
+   e_name plemp.name%type; 
+   e_sal plemp.sal%type; 
+   CURSOR emp_sal is 
+      SELECT  id, name, sal FROM plemp; 
+BEGIN 
+   OPEN emp_sal; 
+   LOOP 
+   FETCH emp_sal into e_id, e_name, e_sal; 
+      EXIT WHEN emp_sal%notfound; 
+      dbms_output.put_line(e_id || ' ' || e_name || ' ' || e_sal); 
+   END LOOP; 
+   CLOSE emp_sal; 
+END; 
+/
