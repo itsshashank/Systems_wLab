@@ -11,3 +11,13 @@ JOIN  sal_update  AS B
       ON A.id = B.id
 
 End
+
+create or replace trigger error
+before update of sal on plemp
+for each row
+begin
+	if(:old.sal > :new.sal)
+	then
+		raise_application_error(-2000,'enter larger sal');
+	end if;
+end;
