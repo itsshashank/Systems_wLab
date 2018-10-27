@@ -1,0 +1,19 @@
+DECLARE
+  A NUMBER;
+  B NUMBER;
+  C NUMBER;
+  H NUMBER;
+BEGIN 
+	A:=&NUMBER;
+	B:=&NUMBER;
+	C:=&NUMBER;
+	H:= A;
+   IF (H<B)THEN
+    H:=B;
+	END IF;
+	IF (H<C) THEN
+	H:=C;
+	END IF;
+	DBMS_OUTPUT.PUT_LINE('BIG IS '||H);
+END;
+/
