@@ -51,4 +51,64 @@ BEGIN
    CLOSE emp_da; 
 END; 
 /
+//update sal by 1000 for a dept
+DECLARE 
+   e_dno plemp.dno%type;
+   e_name plemp.name%type; 
+   e_sal plemp.sal%type; 
+   CURSOR emp_update is 
+      SELECT  name, sal,dno FROM plemp;
+	did number; 
+BEGIN 
+   OPEN emp_update;
+	did := &did;
+      dbms_output.put_line('emp_name' || ' ' || 'DA'); 
+   LOOP 
+   FETCH emp_update into e_name, e_sal ,e_dno; 
+      EXIT WHEN emp_update%notfound; 
+	if (did = e_dno) then
+		e_sal := e_sal +1000;
+	update plemp set sal = e_sal where dno = did;
+	end if;
+      dbms_output.put_line(e_name || ' ' || e_sal); 
+   END LOOP; 
+   CLOSE emp_update; 
+END; 
+/
+//get month
+DECLARE 
+   e_name plemp.name%type; 
+   e_dob plemp.b_date%type; 
+   CURSOR emp_update is 
+      SELECT  name, b_date FROM plemp; 
+BEGIN 
+   OPEN emp_update;
+      dbms_output.put_line('emp_name' || ' ' || 'Birth Month'); 
+   LOOP 
+   FETCH emp_update into e_name,e_dob; 
+      EXIT WHEN emp_update%notfound; 
+      dbms_output.put_line(e_name || ' ' || date_format(b_date,%M)); 
+   END LOOP; 
+   CLOSE emp_update; 
+END; 
+/
+// difference between avg sal of 2 dept
+DECLARE 
+   e_name plemp.name%type; 
+   e_sal plemp.sal%type; 
+   CURSOR emp_da is 
+      SELECT  name, sal FROM plemp;
+	e_da number; 
+BEGIN 
+   OPEN emp_da;
+      dbms_output.put_line('emp_name' || ' ' || 'DA'); 
+   LOOP 
+   FETCH emp_da into e_name, e_sal; 
+      EXIT WHEN emp_da%notfound; 
+	e_da := 0.1*e_sal;
+      dbms_output.put_line(e_name || ' ' || e_da); 
+   END LOOP; 
+   CLOSE emp_da; 
+END; 
+/
 
