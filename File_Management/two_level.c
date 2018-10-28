@@ -103,6 +103,28 @@ void addDir()
         root.no_of_dir++;
     }
 }
+void search(){
+    int loc;
+    char name[max];
+    printf("\nEnter the file name : ");
+    scanf("%s", name);
+    //search in the root first
+    loc = exist(name,root);
+    if(loc >=0)
+    {
+        printf("file found in the root\n");
+    }
+    else if(root.no_of_dir>0){
+        //search in the subdirs
+        for(int i=0;i<root.no_of_dir;i++){
+            loc = exist(name,d[i]);
+            if(loc >= 0)
+                printf("file found in %s directory\n",d[i].dirname);
+        }
+    }
+    else
+        printf("File not found\n");
+}
 void delete()
 {
     //struct directory *temp;
@@ -165,7 +187,7 @@ int main(int argc, char const *argv[])
     int ch = 1;
     do
     {
-        printf("\nDirectory Menu\n\t1.Add file\n\t2.Delete file\n\t3.Display\n\t4.Create Directory\n\t5.Delete directory\n\t6.Exit\nEnter your option:");
+        printf("\nDirectory Menu\n\t1.Add file\n\t2.Delete file\n\t3.Display\n\t4.Create Directory\n\t5.Delete directory\n\t6.Search\n\t7.Exit\nEnter your option:");
         scanf("%d", &ch);
         switch (ch)
         {
@@ -185,12 +207,12 @@ int main(int argc, char const *argv[])
             delDir();
             break;
         case 6:
+            search();
+        case 7:
             return 1;
         default:
             printf("not a choise try again\n");
         }
-        printf("Do you  wanna continue(1/0):");
-        scanf("%d", &ch);
-    } while (ch == 1);
+    } while (1);
     return 0;
 }
