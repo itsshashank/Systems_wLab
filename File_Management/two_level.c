@@ -7,14 +7,14 @@ struct directory
     int no_of_files;
     int no_of_dir;
     char fname[max][max];
-} root, d[max];
+} root, d[max],*temp;
 void displaysub(int n)
 {
     struct directory temp = d[n];
-    printf("\n|\t %s\n \t ", temp.dirname);
+    printf("\n  |\t %s\n \t ", temp.dirname);
     int c = 0;
     while (temp.dirname[c++] != '\0')
-        printf(" --");
+        printf("--");
     for (int i = 0; i < temp.no_of_files; i++)
     {
         printf("\n\t|\n\t| ->\t%s", temp.fname[i]);
@@ -29,6 +29,7 @@ void display()
         printf("--");
     for (int i = 0; i < root.no_of_dir; i++)
     {
+        printf("\n  |\n  | -->\t");
         displaysub(i);
     }
     for (int i = 0; i < root.no_of_files; i++)
@@ -37,21 +38,13 @@ void display()
     }
     printf("\n  |\n  =\n");
 }
-int exist(char fn[], int fd)
+int exist(char fn[], struct directory temp)
 {
-    struct directory temp;
-    if (fd == 0)
-        temp = root;
-    else
-        for (int j = 0; j < root.no_of_dir; j++)
-        {
-            temp = d[j];
-            for (int i = 0; i < temp.no_of_files; i++)
-            {
-                if (strcmp(fn, temp.fname[i]) == 0)
-                    return i;
-            }
-        }
+    for (int i = 0; i < temp.no_of_files; i++)
+    {
+        if (strcmp(fn, temp.fname[i]) == 0)
+            return i;
+    }
     return -1;
 }
 int existDir(char fn[])
@@ -65,22 +58,21 @@ int existDir(char fn[])
 }
 void add()
 {
-    struct directory temp;
+    //struct directory *temp;
     int loc, fd;
     char name[max];
     printf("\n to which dir do you wanna add file root or subdir ( 0/1 ):");
     scanf("%d", &fd);
     if (fd == 0)
-        temp = root;
+        temp = &root;
     else
     {
         printf("\nenter the dir name:");
-
         scanf("%s", name);
         loc = existDir(name);
         if (loc >= 0)
         {
-            temp = d[loc];
+            temp = &d[loc];
         }
         else
         {
@@ -90,12 +82,12 @@ void add()
     }
     printf("\nEnter the file name : ");
     scanf("%s", name);
-    if (exist(name, fd) >= 0)
+    if (exist(name, *temp) >= 0)
         printf("\nfile already in the directory\n");
     else
     {
-        strcpy(temp.fname[temp.no_of_files], name);
-        temp.no_of_files++;
+        strcpy(temp->fname[temp->no_of_files], name);
+        temp->no_of_files++;
     }
 }
 void addDir()
@@ -111,26 +103,60 @@ void addDir()
         root.no_of_dir++;
     }
 }
-
-/*void delete (int fd)
+void delete()
+{
+    //struct directory *temp;
+    int loc, fd;
+    char name[max];
+    printf("\n to which dir do you wanna delete file from root or subdir ( 0/1 ):");
+    scanf("%d", &fd);
+    if (fd == 0)
+        temp = &root;
+    else
     {
-        char name[max];
-        if (fd == 0)
-            strcpy(d.fname[d.no_of_files], name);
-        d.no_of_files++;
-        printf("\nEnter the file name : ");
-        else printf("\nEnter the directory name : ");
+        printf("\nenter the dir name:");
         scanf("%s", name);
-        int loc = exist(name);
+        loc = existDir(name);
         if (loc >= 0)
         {
-            for (int i = loc; i < d.no_of_files; i++)
-                strcpy(d.fname[i], d.fname[i + 1]);
-            d.no_of_files--;
+            temp = &d[loc];
         }
         else
-            printf("\nNo file by that name\n");
-    }*/
+        {
+            printf("\n soory bubby no dir :(\n");
+            return;
+        }
+    }
+    printf("\nEnter the file name : ");
+    scanf("%s", name);
+    loc = exist(name, *temp); 
+    if (loc >= 0)
+    {
+        for (int i = loc; i < temp->no_of_files; i++)
+            strcpy(temp->fname[i], temp->fname[i + 1]);
+        temp->no_of_files -- ;
+    }
+    else
+    {
+        printf("\nfile not in the directory\n");
+    }
+}
+void delDir()
+{
+    char name[max];
+    printf("\nEnter the directory name : ");
+    scanf("%s", name);
+    int loc = existDir(name);
+    if (loc >= 0){
+        for (int i = loc; i < root.no_of_dir; i++)
+            d[i] = d[i+1];//strcpy(d[i].dirname, d[i+1].dirname);
+        root.no_of_dir-- ;
+        }
+    else
+    {
+        printf("no such dir\n");
+    }
+}
 int main(int argc, char const *argv[])
 {
     printf("Enter the name of root directory: ");
@@ -139,7 +165,7 @@ int main(int argc, char const *argv[])
     int ch = 1;
     do
     {
-        printf("\nDirectory Menu\n\t1.Add file\n\t2.Delete file\n\t3.Display\n\t4.Create Directory\n\t5.Delete directory\nEnter your option:");
+        printf("\nDirectory Menu\n\t1.Add file\n\t2.Delete file\n\t3.Display\n\t4.Create Directory\n\t5.Delete directory\n\t6.Exit\nEnter your option:");
         scanf("%d", &ch);
         switch (ch)
         {
@@ -147,7 +173,7 @@ int main(int argc, char const *argv[])
             add();
             break;
         case 2:
-            //delete (0);
+            delete();
             break;
         case 3:
             display();
@@ -156,12 +182,14 @@ int main(int argc, char const *argv[])
             addDir();
             break;
         case 5:
-            //delete (1);
+            delDir();
             break;
+        case 6:
+            return 1;
         default:
-            printf("not a choice try again\n");
+            printf("not a choise try again\n");
         }
-        printf("Do you  wanna continue(0/1):");
+        printf("Do you  wanna continue(1/0):");
         scanf("%d", &ch);
     } while (ch == 1);
     return 0;
