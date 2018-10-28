@@ -4,10 +4,11 @@
 struct directory
 {
     char dirname[max];
+    struct directory subdir[max];
     int no_of_files;
     int no_of_dir;
     char fname[max][max];
-} root, d[max],*temp;
+} root;
 void displaysub(int n)
 {
     struct directory temp = d[n];
@@ -38,27 +39,9 @@ void display()
     }
     printf("\n  |\n  =\n");
 }
-int exist(char fn[], struct directory temp)
-{
-    for (int i = 0; i < temp.no_of_files; i++)
-    {
-        if (strcmp(fn, temp.fname[i]) == 0)
-            return i;
-    }
-    return -1;
-}
-int existDir(char fn[])
-{
-    for (int i = 0; i < root.no_of_dir; i++)
-    {
-        if (strcmp(fn, d[i].dirname) == 0)
-            return i;
-    }
-    return -1;
-}
 void add()
 {
-    //struct directory *temp;
+    struct directory *temp;
     int loc, fd;
     char name[max];
     printf("\n to which dir do you wanna add file root or subdir ( 0/1 ):");
