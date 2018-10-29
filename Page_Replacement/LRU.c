@@ -42,6 +42,7 @@ int findLeast()
 void replace(int a)
 {
     next = findLeast();
+    hits[next] = 0;
     page[next] = a;
 }
 void push(int ch)
@@ -73,8 +74,8 @@ int main(int argc, char const *argv[])
     {
         printf("%d\t", seq[i]);
         int loc = search(seq[i]);
-        if (loc >= 0) //no page fault
-            hits[loc]++;                    // do nothing
+        if (loc >= 0)    //no page fault
+            hits[loc]++; // do nothing
         else
         {
             no_of_pageFaults++;
