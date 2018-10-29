@@ -17,10 +17,10 @@ void printPage()
     printf("\n");
     printf("|");
     for (int i = 0; i < len; i++)
-        if (i < len)
+        if (i < top)
             printf("%d|", page[i]);
         else
-            printf("0|");
+            printf(" |");
     printf("\n");
     for (int i = 0; i < len; i++)
         printf("--");
