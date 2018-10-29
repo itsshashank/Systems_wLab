@@ -59,12 +59,11 @@ int main(int argc, char const *argv[])
 {
     int seq[max], seq_len;
     int no_of_pageFaults = 0;
-    printf("Enter the max size of pages: ");
+    printf("Enter the max size of freame: ");
     scanf("%d", &len);
     printf("Enter the size of sequence: ");
     scanf("%d", &seq_len);
     printf("Enter the sequence :");
-    //scanf("%s",seq);
     for (int i = 0; i < seq_len; i++)
     {
         scanf("%d", &seq[i]);
