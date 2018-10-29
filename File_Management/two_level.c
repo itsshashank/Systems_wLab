@@ -7,7 +7,7 @@ struct directory
     int no_of_files;
     int no_of_dir;
     char fname[max][max];
-} root, d[max],*temp;
+} root, d[max], *temp;
 void displaysub(int n)
 {
     struct directory temp = d[n];
@@ -103,29 +103,32 @@ void addDir()
         root.no_of_dir++;
     }
 }
-void search(){
+void search()
+{
     int loc;
     char name[max];
     printf("\nEnter the file name : ");
     scanf("%s", name);
     //search in the root first
-    loc = exist(name,root);
-    if(loc >=0)
+    loc = exist(name, root);
+    if (loc >= 0)
     {
         printf("file found in the root\n");
     }
-    else if(root.no_of_dir>0){
+    else if (root.no_of_dir > 0)
+    {
         //search in the subdirs
-        for(int i=0;i<root.no_of_dir;i++){
-            loc = exist(name,d[i]);
-            if(loc >= 0)
-                printf("file found in %s directory\n",d[i].dirname);
+        for (int i = 0; i < root.no_of_dir; i++)
+        {
+            loc = exist(name, d[i]);
+            if (loc >= 0)
+                printf("file found in %s directory\n", d[i].dirname);
         }
     }
     else
         printf("File not found\n");
 }
-void delete()
+void delete ()
 {
     //struct directory *temp;
     int loc, fd;
@@ -151,12 +154,12 @@ void delete()
     }
     printf("\nEnter the file name : ");
     scanf("%s", name);
-    loc = exist(name, *temp); 
+    loc = exist(name, *temp);
     if (loc >= 0)
     {
         for (int i = loc; i < temp->no_of_files; i++)
             strcpy(temp->fname[i], temp->fname[i + 1]);
-        temp->no_of_files -- ;
+        temp->no_of_files--;
     }
     else
     {
@@ -169,11 +172,12 @@ void delDir()
     printf("\nEnter the directory name : ");
     scanf("%s", name);
     int loc = existDir(name);
-    if (loc >= 0){
+    if (loc >= 0)
+    {
         for (int i = loc; i < root.no_of_dir; i++)
-            d[i] = d[i+1];//strcpy(d[i].dirname, d[i+1].dirname);
-        root.no_of_dir-- ;
-        }
+            d[i] = d[i + 1]; //strcpy(d[i].dirname, d[i+1].dirname);
+        root.no_of_dir--;
+    }
     else
     {
         printf("no such dir\n");
@@ -195,7 +199,7 @@ int main(int argc, char const *argv[])
             add();
             break;
         case 2:
-            delete();
+            delete ();
             break;
         case 3:
             display();
