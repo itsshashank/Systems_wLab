@@ -67,12 +67,12 @@ BEGIN
    LOOP 
    FETCH emp_update into e_name, e_sal ,e_dno; 
       EXIT WHEN emp_update%notfound; 
+      temp := e_sal;
 	if (did = e_dno) then
-            temp := e_sal;
 		e_sal := e_sal +1000;
 	update plemp set sal = e_sal where dno = did;
-	end if;
-      dbms_output.put_line(e_name || ' ' || e_sal ||' '|| temp); 
+      dbms_output.put_line(e_name || ' ' || e_sal ||' '|| temp);
+	end if; 
    END LOOP; 
    CLOSE emp_update; 
 END; 
@@ -124,5 +124,89 @@ BEGIN
    CLOSE emp_sal_diff; 
 END; 
 /
-
-
+// display sal in decending order ( FOR LOOP)
+DECLARE
+      CURSOR decsal is 
+            SELECT name,sal from plemp order by sal desc;
+BEGIN
+      for i in decsal
+            LOOP
+                  dbms_output.put_line(i.name || ' ' ||i.sal );
+            END LOOP;
+end;
+/
+//update sal by 1000 for a dept (Parametrized CURSOR)
+DECLARE 
+   e_dno plemp.dno%type;
+   e_name plemp.name%type; 
+   e_sal plemp.sal%type;
+   temp plemp.sal%type; 
+   CURSOR emp_update( c_dno number) is 
+      SELECT  name, sal,dno FROM plemp where dno = c_dno;
+	did number; 
+BEGIN
+      did := &did;
+   OPEN emp_update(did);
+      dbms_output.put_line('emp_name' || ' ' || 'sal' || 'oldsal'); 
+   LOOP 
+   FETCH emp_update into e_name, e_sal ,e_dno; 
+      EXIT WHEN emp_update%notfound; 
+      temp := e_sal;
+	update plemp set sal = e_sal where dno = dno;
+      dbms_output.put_line(e_name || ' ' || e_sal ||' '|| temp); 
+   END LOOP; 
+   CLOSE emp_update; 
+END; 
+/
+//test
+declare
+      cursor c_emp is
+            select id,name,sal from plemp where dno=&dno;
+begin
+      for c in c_emp
+      loop
+            dbms_output.put_line(c.id||'     '||c.name||'      '||c.sal);
+      end loop;
+end;
+/
+//test 2
+declare
+      cursor c2(xdno number) is
+            select id,name,sal,dno from plemp where dno=xdno;
+      d_no number(4);
+      eno number(5);
+      nm varchar2(15);
+begin
+      d_no:=&deptno;
+      for c in c2(d_no)
+      loop
+            if c2%found then
+                  dbms_output.put_line(c.id||'     '||c.name||'      '||c.sal);
+            else
+                  dbms_output.put_line('deptno '||d_no|| ' does not exist');
+            end if;
+      end loop;
+end;
+/
+//dbms_output
+declare
+      cursor c2(xdno number) is
+            select id,name,sal,dno from plemp where dno=xdno;
+      d_no number(4);
+      temp number;
+begin
+      d_no:=&deptno;
+      for c in c2(d_no)
+      loop
+            if c2%found then
+                  temp := c.sal;
+	            
+                  c.sal := c.sal + 1000;
+                  dbms_output.put_line(c.name || ' ' || c.sal ||' '|| temp); 
+            else
+                  dbms_output.put_line('deptno '||d_no|| ' does not exist');
+            end if;
+      update plemp set sal = c.sal where dno = d_no;
+      end loop;
+end;
+/
