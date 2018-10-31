@@ -55,22 +55,24 @@ END;
 DECLARE 
    e_dno plemp.dno%type;
    e_name plemp.name%type; 
-   e_sal plemp.sal%type; 
+   e_sal plemp.sal%type;
+   temp plemp.sal%type; 
    CURSOR emp_update is 
       SELECT  name, sal,dno FROM plemp;
 	did number; 
 BEGIN 
    OPEN emp_update;
 	did := &did;
-      dbms_output.put_line('emp_name' || ' ' || 'sal'); 
+      dbms_output.put_line('emp_name' || ' ' || 'sal' || 'oldsal'); 
    LOOP 
    FETCH emp_update into e_name, e_sal ,e_dno; 
       EXIT WHEN emp_update%notfound; 
 	if (did = e_dno) then
+            temp := e_sal;
 		e_sal := e_sal +1000;
 	update plemp set sal = e_sal where dno = did;
 	end if;
-      dbms_output.put_line(e_name || ' ' || e_sal); 
+      dbms_output.put_line(e_name || ' ' || e_sal ||' '|| temp); 
    END LOOP; 
    CLOSE emp_update; 
 END; 
@@ -94,32 +96,33 @@ END;
 /
 // difference between avg sal of 2 dept
 DECLARE 
-   e_did plemp.did%type; 
+   e_dno plemp.dno%type; 
    e_sal plemp.sal%type; 
    CURSOR emp_sal_diff is 
-      SELECT  did, avg(sal) FROM plemp group by did;
-      d1 plemp.did%type;
-      d2 plemp.did%type;
-   d1=&d1;
-   d2=&d2;
+      SELECT  dno, avg(sal) FROM plemp group by dno;
+      deptone number;
+      depttwo plemp.dno%type;   
    sal_d1 number;
    sal_d2 number;
    sal_diff number;
 BEGIN 
    OPEN emp_sal_diff;
-      dbms_output.put_line('difference in sal'||' '||d1||','||d2); 
+      deptone := &deptone;
+      depttwo := &depttwo;
+      dbms_output.put_line('difference in sal'||' '||deptone||','||depttwo); 
    LOOP 
-   FETCH emp_sal_diff into e_did, e_sal; 
-      EXIT WHEN emp_sal-diff%notfound; 
-	if (e_did = d1) then
+   FETCH emp_sal_diff into e_dno, e_sal; 
+      EXIT WHEN emp_sal_diff%notfound; 
+	if (e_dno = deptone) then
 		sal_d1 := e_sal ;
-	else if (e_did = d2) THEN
+	elsif (e_dno = depttwo) THEN
             sal_d2 := e_sal;
-      end if;
-      sal_diff := sal_d1 - sal_d2;
-      dbms_output.put_line(sal_diff)); 
+      end if; 
    END LOOP; 
-   CLOSE emp_da; 
+   sal_diff := sal_d1 - sal_d2;
+      dbms_output.put_line(sal_diff);
+   CLOSE emp_sal_diff; 
 END; 
 /
+
 
