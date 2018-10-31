@@ -15,7 +15,7 @@ BEGIN
    CLOSE emp_sal; 
 END; 
 /
-//Date of birt
+//Date of birth
 DECLARE 
    e_name plemp.name%type; 
    e_dob plemp.b_date%type; 
@@ -62,7 +62,7 @@ DECLARE
 BEGIN 
    OPEN emp_update;
 	did := &did;
-      dbms_output.put_line('emp_name' || ' ' || 'DA'); 
+      dbms_output.put_line('emp_name' || ' ' || 'sal'); 
    LOOP 
    FETCH emp_update into e_name, e_sal ,e_dno; 
       EXIT WHEN emp_update%notfound; 
@@ -78,35 +78,46 @@ END;
 //get month
 DECLARE 
    e_name plemp.name%type; 
-   e_dob plemp.b_date%type; 
-   CURSOR emp_update is 
-      SELECT  name, b_date FROM plemp; 
+   e_dob varchar(3); 
+   CURSOR emp_b_month is 
+      SELECT  name, SUBSTR(b_date,4,3) FROM plemp; 
 BEGIN 
-   OPEN emp_update;
+   OPEN emp_b_month;
       dbms_output.put_line('emp_name' || ' ' || 'Birth Month'); 
    LOOP 
-   FETCH emp_update into e_name,e_dob; 
-      EXIT WHEN emp_update%notfound; 
-      dbms_output.put_line(e_name || ' ' || date_format(b_date,%M)); 
+   FETCH emp_b_month into e_name,e_dob; 
+      EXIT WHEN emp_b_month%notfound; 
+      dbms_output.put_line(e_name || ' ' || e_dob); 
    END LOOP; 
-   CLOSE emp_update; 
+   CLOSE emp_b_month; 
 END; 
 /
 // difference between avg sal of 2 dept
 DECLARE 
-   e_name plemp.name%type; 
+   e_did plemp.did%type; 
    e_sal plemp.sal%type; 
-   CURSOR emp_da is 
-      SELECT  name, sal FROM plemp;
-	e_da number; 
+   CURSOR emp_sal_diff is 
+      SELECT  did, avg(sal) FROM plemp group by did;
+      d1 plemp.did%type;
+      d2 plemp.did%type;
+   d1=&d1;
+   d2=&d2;
+   sal_d1 number;
+   sal_d2 number;
+   sal_diff number;
 BEGIN 
-   OPEN emp_da;
-      dbms_output.put_line('emp_name' || ' ' || 'DA'); 
+   OPEN emp_sal_diff;
+      dbms_output.put_line('difference in sal'||' '||d1||','||d2); 
    LOOP 
-   FETCH emp_da into e_name, e_sal; 
-      EXIT WHEN emp_da%notfound; 
-	e_da := 0.1*e_sal;
-      dbms_output.put_line(e_name || ' ' || e_da); 
+   FETCH emp_sal_diff into e_did, e_sal; 
+      EXIT WHEN emp_sal-diff%notfound; 
+	if (e_did = d1) then
+		sal_d1 := e_sal ;
+	else if (e_did = d2) THEN
+            sal_d2 := e_sal;
+      end if;
+      sal_diff := sal_d1 - sal_d2;
+      dbms_output.put_line(sal_diff)); 
    END LOOP; 
    CLOSE emp_da; 
 END; 
