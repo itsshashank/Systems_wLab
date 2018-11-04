@@ -11,7 +11,7 @@ void main()
     printf("enter the file name to store the opcode table:");
     scanf("%s",fname);
     FILE *f;
-    f=fopen(fname,"w");
+    f=fopen(fname,"wb");
     int n;
     scanf("%d",&n);
     for(int i=0;i<n;i++){
