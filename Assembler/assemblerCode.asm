@@ -1,6 +1,5 @@
-MAIN    START   2000
+MAIN    START   2000 
 BEGIN   LDA     NUM1
-NUM1    WORD    5
 **      ADD     NUM2
 **      LDCH    CHAR1
 **      STCH    CHAR2
