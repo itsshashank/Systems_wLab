@@ -19,8 +19,7 @@ struct opcode
 int main()
 {
     int locctr, start, len;
-    fpos_t f;
-    FILE *fin, *fsymt, *fsymrt, *fsymwt, *fop, *fout;
+    FILE *fin, *fsymt, *fop, *fout;
     char filename[max];
     printf("Enter the asm file name :");
     scanf("%s", filename);
@@ -31,14 +30,15 @@ int main()
     fop = fopen("opcode.dat", "rb");
     //FirstLine
     fsymt = fopen("symt.dat", "wb");
+    fclose(fsymt); // to clear
     fscanf(fin, "%s %s %s", in.label, in.opcode, in.operand);
     if (strcmp(in.opcode, "START") == 0)
     {
         start = atoi(in.operand);
         locctr = start;
         fprintf(fout, "%s\t%s\t%s\n", in.label, in.opcode, in.operand);
-        fprintf(fsymt, "%s\t%s\n", in.opcode, in.operand);
-        fclose(fsymt);
+        /*fprintf(fsymt, "%s\t%s\n", in.opcode, in.operand);
+        fclose(fsymt);*/
     }
     else
         locctr = 0;
@@ -46,10 +46,12 @@ int main()
     {
         fsymt = fopen("symt.dat", "rb");
         printf("the code is %s %s %s\n", in.label, in.opcode, in.operand);
-        if (strcmp(in.opcode, "END") == 0)
+        if (strcmp(in.opcode, "END") == 0){
+            fclose(fsymt);
             break;
+        }
         fprintf(fout, "%d\t", locctr);
-        printf("\nfile location of write is %d", ftell(fsymt));
+        //printf("\nfile location of write is %d", ftell(fsymt));
         while (fscanf(fsymt, "%s", s.symbol) != EOF)
         {
             printf("comparing the symbol to symbol tabel %s with %s\n", in.label, s.symbol);
@@ -63,7 +65,7 @@ int main()
 
         if (strcmp(in.label, "**") != 0)
         {
-            fsymt = fopen("symt.dat", "wb");
+            fsymt = fopen("symt.dat", "ab");
             strcpy(s.symbol, in.label);
             s.addr = locctr;
             printf("writing the symbol to symbol tabel %s\n", in.label);
@@ -90,7 +92,7 @@ int main()
         else if (strcmp(in.opcode, "RESB") == 0)
             locctr += (atoi(in.operand));
         else if (strcmp(in.opcode, "BYTE") == 0)
-            ++locctr;
+            ++locctr;//strlen
         fprintf(fout, "%s\t %s\t %s\n", in.label, in.opcode, in.operand);
     }
     fclose(fin);
