@@ -137,12 +137,12 @@ end;
 /
 //update sal by 1000 for a dept (Parametrized CURSOR)
 DECLARE 
-   e_dno plemp.dno%type;
+   e_dno plemp.did%type;
    e_name plemp.name%type; 
    e_sal plemp.sal%type;
    temp plemp.sal%type; 
    CURSOR emp_update( c_dno number) is 
-      SELECT  name, sal,dno FROM plemp where dno = c_dno;
+      SELECT  name, sal,did FROM plemp where did = c_dno;
 	did number; 
 BEGIN
       did := &did;
@@ -151,8 +151,8 @@ BEGIN
    LOOP 
    FETCH emp_update into e_name, e_sal ,e_dno; 
       EXIT WHEN emp_update%notfound; 
-      temp := e_sal;
-	update plemp set sal = e_sal where dno = dno;
+      temp := e_sal+1000;
+	update plemp set sal = temp where did = e_dno;
       dbms_output.put_line(e_name || ' ' || e_sal ||' '|| temp); 
    END LOOP; 
    CLOSE emp_update; 
@@ -191,22 +191,28 @@ end;
 //dbms_output
 declare
       cursor c2(xdno number) is
-            select id,name,sal,dno from plemp where dno=xdno;
+            select id,name,sal,did from plemp where did=xdno;
       d_no number(4);
       temp number;
 begin
       d_no:=&deptno;
       for c in c2(d_no)
       loop
-            if c2%found then
-                  temp := c.sal;
-	            
-                  c.sal := c.sal + 1000;
-                  dbms_output.put_line(c.name || ' ' || c.sal ||' '|| temp); 
-            else
+            if not c2%found then
                   dbms_output.put_line('deptno '||d_no|| ' does not exist');
+            else
+                  temp := c.sal;
+                  c.sal := c.sal + 1000;
+                  dbms_output.put_line(c.name || ' ' || c.sal ||' '|| temp);
             end if;
-      update plemp set sal = c.sal where dno = d_no;
+      update plemp set sal = c.sal where did = d_no;
       end loop;
 end;
+/
+//PROCEDURE run as EXECUTE greetings
+CREATE OR REPLACE PROCEDURE greetings 
+AS 
+BEGIN 
+   dbms_output.put_line('Welcome to plsql'); 
+END; 
 /
