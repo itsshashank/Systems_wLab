@@ -180,33 +180,35 @@ begin
       d_no:=&deptno;
       for c in c2(d_no)
       loop
-            if c2%found then
-                  dbms_output.put_line(c.id||'     '||c.name||'      '||c.sal);
-            else
+            dbms_output.put_line(c.id||'     '||c.name||'      '||c.sal);
+      end loop;
+      OPEN c2(d_no);
+      if c2%ROWCOUNT =0 then
                   dbms_output.put_line('deptno '||d_no|| ' does not exist');
             end if;
-      end loop;
+      CLOSE c2;
 end;
 /
-//dbms_output
+//dbms_output for 8 and 9
 declare
       cursor c2(xdno number) is
-            select id,name,sal,did from plemp where did=xdno;
+            select id,name,sal,dno from plemp where dno=xdno;
       d_no number(4);
       temp number;
 begin
       d_no:=&deptno;
       for c in c2(d_no)
       loop
-            if not c2%found then
-                  dbms_output.put_line('deptno '||d_no|| ' does not exist');
-            else
                   temp := c.sal;
                   c.sal := c.sal + 1000;
                   dbms_output.put_line(c.name || ' ' || c.sal ||' '|| temp);
-            end if;
-      update plemp set sal = c.sal where did = d_no;
+      update plemp set sal = c.sal where dno = d_no;
       end loop;
+      OPEN c2(d_no);
+      if c2%ROWCOUNT =0 then
+                  dbms_output.put_line('deptno '||d_no|| ' does not exist');
+            end if;
+      CLOSE c2;
 end;
 /
 //PROCEDURE run as EXECUTE greetings
@@ -216,3 +218,30 @@ BEGIN
    dbms_output.put_line('Welcome to plsql'); 
 END; 
 /
+//PROCEDURE to display
+DECLARE
+      dno plemp.dno%type;
+      PROCEDURE display(xdno number)
+      is
+      BEGIN
+       FOR aRow IN (SELECT id, Name,sal fROM plemp WHere dno = xdno)
+       LOop
+            dbms_output.put_line('ID '|| 'NAME ' || 'sal ');
+            dbms_output.put_line(aRow.id || ' ' || aRow.name ||' '|| aRow.sal);
+       end loop;
+      end;
+BEGIN
+      dno :=&dno;
+      display(dno);
+END;
+/
+//indepenent procedures
+create or replace PROCEDURE display(xdno number)
+      is
+      BEGIN
+       FOR aRow IN (SELECT id, Name,sal fROM plemp WHere dno = xdno)
+       LOop
+            dbms_output.put_line('ID '|| 'NAME ' || 'sal ');
+            dbms_output.put_line(aRow.id || ' ' || aRow.name ||' '|| aRow.sal);
+       end loop;
+      end;
