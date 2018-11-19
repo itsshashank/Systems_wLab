@@ -202,7 +202,7 @@ begin
                   temp := c.sal;
                   c.sal := c.sal + 1000;
                   dbms_output.put_line(c.name || ' ' || c.sal ||' '|| temp);
-      update plemp set sal = c.sal where dno = d_no;
+                  update plemp set sal = c.sal where dno = d_no;
       end loop;
       OPEN c2(d_no);
       if c2%ROWCOUNT =0 then
@@ -288,4 +288,29 @@ CREATE OR REPLACE PACKAGE BODY c_package AS
        end loop;
       end display;
 end c_package;
+/
+
+create or replace package c_package AS
+
+end package;
+/
+CREATE PACKAGE emp_stuff AS
+   CURSOR c1 RETURN plemp%ROWTYPE;  -- declare cursor spec
+END emp_stuff;
+/
+CREATE PACKAGE BODY emp_stuff AS
+   CURSOR c1 RETURN plemp%ROWTYPE IS
+      SELECT * FROM plemp WHERE sal > 2500;  -- define cursor body
+END emp_stuff;
+/
+
+DECLARE   emp_rec plemp%ROWTYPE;BEGIN
+   OPEN emp_stuff.c1;
+   LOOP
+      FETCH emp_stuff.c1 INTO emp_rec;
+-- do processing here ...
+      EXIT WHEN emp_stuff.c1%NOTFOUND;
+   END LOOP;
+   CLOSE emp_stuff.c1;
+END;
 /
