@@ -309,8 +309,24 @@ DECLARE   emp_rec plemp%ROWTYPE;BEGIN
    LOOP
       FETCH emp_stuff.c1 INTO emp_rec;
 -- do processing here ...
+      dbms_output.put_line(emp_rec.name||' '||emp_rec.sal);
       EXIT WHEN emp_stuff.c1%NOTFOUND;
    END LOOP;
    CLOSE emp_stuff.c1;
 END;
 /
+
+CREATE PACKAGE body my_pac AS
+      FUNCTION dissal(xid number)RETURN number;
+end my_pac;
+CREATE PACKAGE body my_pac AS
+      FUNCTION dissal(xid number)RETURN number
+      is
+      BEGIN
+       FOR aRow IN (SELECT id, Name,sal fROM plemp WHere id = xid)
+       LOop
+            dbms_output.put_line('NAME ' || 'sal ');
+            dbms_output.put_line( aRow.name ||' '|| aRow.sal);
+            RETURN aRow.sal;
+       end loop;
+      end dissal;
