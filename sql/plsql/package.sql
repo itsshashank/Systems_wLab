@@ -47,11 +47,13 @@ DECLARE   emp_rec plemp%ROWTYPE;BEGIN
    CLOSE emp_stuff.c1;
 END;
 /
-
-CREATE PACKAGE body my_pac AS
-      FUNCTION dissal(xid number)RETURN number;
+//finally package 
+create or replace package my_pac AS
+      function dissal(xid number)RETURN NUMber;
+      PROCEDURE display(xdno number);
 end my_pac;
-CREATE PACKAGE body my_pac AS
+/
+CREATE or replace PACKAGE body my_pac AS
       FUNCTION dissal(xid number)RETURN number
       is
       BEGIN
@@ -62,3 +64,25 @@ CREATE PACKAGE body my_pac AS
             RETURN aRow.sal;
        end loop;
       end dissal;
+      PROCEDURE display(xdno number)
+      is
+      BEGIN
+       dbms_output.put_line('ID '|| 'NAME ' || 'sal ');
+       FOR aRow IN (SELECT id, Name,sal fROM plemp WHere did = xdno)
+       LOop
+            dbms_output.put_line(aRow.id || ' ' || aRow.name ||' '|| aRow.sal);
+       end loop;
+      end;
+end my_pac;
+/
+declare 
+      id number;
+      sal number;
+      dno number;
+BEGIN
+      id := &id;
+      sal:=my_pac.dissal(id);
+      dno := &dno;
+      my_pac.display(dno);
+end;
+/
