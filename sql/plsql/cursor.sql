@@ -202,7 +202,7 @@ begin
                   temp := c.sal;
                   c.sal := c.sal + 1000;
                   dbms_output.put_line(c.name || ' ' || c.sal ||' '|| temp);
-      update plemp set sal = c.sal where dno = d_no;
+                  update plemp set sal = c.sal where dno = d_no;
       end loop;
       OPEN c2(d_no);
       if c2%ROWCOUNT =0 then
